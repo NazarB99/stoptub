@@ -1,0 +1,17 @@
+{
+  "name": "StopTub",
+  "displayName": "StopTub",
+  "senderID": "594331487245",
+  "connectyCubeConfig": [
+    {
+      "appId": 1052,
+      "authKey": "RALSQ5bJDgsA4vK",
+      "authSecret": "xO9GMO9jOWRRatY"
+    },
+    {
+      "debug": {
+        "mode": 1
+      }
+    }
+  ]
+}
