@@ -7,6 +7,8 @@ import React, {Component} from 'react'
 import {RefreshControl, StatusBar, FlatList, StyleSheet, View, Text} from 'react-native'
 import {connect} from 'react-redux'
 
+import User from '../config/UserConfig'
+import {userLogin} from '../actions/chatUserActions'
 import Chat from '../config/ChatConfig'
 import {fetchDialogs, addNewDialog} from '../actions/chatDialogsActions'
 import Dialog from '../components/Dialog'
@@ -31,35 +33,36 @@ class DialogsScreen extends Component {
     refreshing: false,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getConversations()
+    // this.createDialog()
   }
 
   getConversations() {
     Chat.getConversations()
       .then(dialogs => {
-        console.log(dialogs)
+        // console.log(dialogs)
         this.props.fetchDialogs(dialogs)
         this.setState({refreshing: false})
       })
       .catch(e => alert(`Error.\n\n${JSON.stringify(e)}`))
   }
 
-  //   createDialog() {
-  //     const {usersSelect, addNewDialog} = this.props
-  //     // const dialogType = usersSelect.length > 1 ? 2 : 3
+  // createDialog() {
+  //   const {usersSelect, addNewDialog} = this.props
+  //   // const dialogType = usersSelect.length > 1 ? 2 : 3
 
-  //     Chat.createConversation({
-  //       type: 3,
-  //       occupants_ids: [164437],
+  //   Chat.createConversation({
+  //     type: 3,
+  //     occupants_ids: [164552],
   //     //   name: 'MR',
+  //   })
+  //     .then(dialog => {
+  //       addNewDialog(dialog)
+  //       // this.toChat(dialog)
   //     })
-  //       .then(dialog => {
-  //         addNewDialog(dialog)
-  //         // this.toChat(dialog)
-  //       })
-  //       .catch(e => alert(`Error.\n\n${JSON.stringify(e)}`))
-  //   }
+  //     .catch(e => alert(`Error.\n\n${JSON.stringify(e)}`))
+  // }
 
   _onRefresh = () => {
     this.setState({refreshing: true})
@@ -77,13 +80,11 @@ class DialogsScreen extends Component {
   }
 
   _renderDialog(dialog) {
-    return <Dialog dialog={dialog} />
+    return <Dialog navigation={this.props.navigation} dialog={dialog} />
   }
 
   render() {
     const {dialogs} = this.props
-    console.log('HERE DIALOGS')
-    console.log(dialogs)
 
     return (
       <View style={styles.container}>

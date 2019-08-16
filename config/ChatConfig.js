@@ -43,6 +43,8 @@ class ChatService {
   // Chat - Dialogs
   getConversations() {
     return new Promise((resolve, reject) => {
+      // const creds = {login: 'user1', password: '1234567890'}
+      // ConnectyCube.createSession(creds, (error, session) => {
       ConnectyCube.chat.dialog.list({sort_desc: 'updated_at'}, (error, result) => {
         if (!error && result) {
           const {items} = result
@@ -79,33 +81,34 @@ class ChatService {
           reject(error)
         }
       })
+      // })
     })
   }
 
   createConversation(params) {
     return new Promise((resolve, reject) => {
-      const creds = {login: 'user1', password: '1234567890'}
-      ConnectyCube.createSession(creds, function(error, session) {
-        ConnectyCube.chat.dialog.create(params, (error, conversation) => {
-          if (!error && conversation) {
-            const dialog = new Dialog(conversation)
+      // const creds = {login: 'user1', password: '1234567890'}
+      // ConnectyCube.createSession(creds, (error, session) => {
+      ConnectyCube.chat.dialog.create(params, (error, conversation) => {
+        if (!error && conversation) {
+          const dialog = new Dialog(conversation)
 
-            if (dialog.type === 3) {
-              dialog.destination = ConnectyCube.chat.helpers.getRecipientId(
-                dialog.occupants_ids,
-                CurrentUser.getProp('id')
-              )
-            } else {
-              ConnectyCube.chat.muc.join(dialog.room_jid)
-              dialog.destination = dialog.room_jid
-            }
-
-            resolve(dialog)
+          if (dialog.type === 3) {
+            dialog.destination = ConnectyCube.chat.helpers.getRecipientId(
+              dialog.occupants_ids,
+              CurrentUser.getProp('id')
+            )
           } else {
-            reject(error)
+            ConnectyCube.chat.muc.join(dialog.room_jid)
+            dialog.destination = dialog.room_jid
           }
-        })
+
+          resolve(dialog)
+        } else {
+          reject(error)
+        }
       })
+      // })
     })
   }
 
@@ -138,7 +141,7 @@ class ChatService {
 
             resolve(history.reverse())
           } else {
-            reject(error)
+            console.error(error)
           }
         }
       )

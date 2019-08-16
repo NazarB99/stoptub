@@ -21,6 +21,7 @@ import LoginScreen from './screens/LoginScreen'
 import MainScreen from './screens/MainScreen'
 import MedicationScreen from './screens/MedicationScreen'
 import CheckUpScreen from './screens/CheckUpScreen'
+import DialogsScreen from './screens/DialogsScreen'
 import ChatScreen from './screens/ChatScreen'
 import {store, persistor} from './store'
 import {MAIN_COLOR, GREY_COLOR} from './config/Constants'
@@ -36,6 +37,7 @@ const StackNav = createStackNavigator(
   {
     Login: LoginScreen,
     Main: MainScreen,
+    Dialog: DialogsScreen,
     Chat: ChatScreen,
   },
   {

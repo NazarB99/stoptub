@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 export const connectycubeConfig = [
   {
-    appId: 1052,
-    authKey: 'RALSQ5bJDgsA4vK',
-    authSecret: 'xO9GMO9jOWRRatY',
+    appId: 1062,
+    authKey: 'BAbrTW5Hbjarx7R',
+    authSecret: 'we4XJKfXePpBeAD',
   },
   {
     // chat: {

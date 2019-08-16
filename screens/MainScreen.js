@@ -41,6 +41,7 @@ class MainScreen extends Component {
     this.state = {
       appIsActive: true,
       waitConnect: false,
+      loading: false,
     }
 
     this.pushService
@@ -51,13 +52,30 @@ class MainScreen extends Component {
 
     ConnectyCube.init(...appConfig.connectyCubeConfig)
 
-    // User.autologin()
-    //   .then(this.props.userLogin)
-    //   .catch(() => Actions.auth())
+    User.autologin()
+      .then(this.props.userLogin)
+      .catch(() => this.signIn('examplee', 'examplee@example.com', 'examplee'))
   }
+
+  componentWillReceiveProps(props) {
+    this._connect(props)
+  }
+
+  // this.signIn('examplee', 'examplee@example.com', 'examplee')
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange.bind(this))
+  }
+
+  signIn = (name, email, password) => {
+    if (!name.trim() && !email.trim()) {
+      alert('Warning.\n\nFill the fields to login.')
+      return
+    }
+
+    User.signin({name, email, password})
+      .then(this.props.userLogin)
+      .catch(e => alert(`Error.\n\n${JSON.stringify(e)}`))
   }
 
   /*               *
@@ -125,7 +143,7 @@ class MainScreen extends Component {
     ConnectyCube.chat.onDisconnectedListener = this.props.chatDisconnected
     ConnectyCube.chat.onReconnectedListener = this.props.chatDisconnected
     ConnectyCube.chat.onMessageListener = this._onMessageListener.bind(this)
-    // ConnectyCube.chat.onSentMessageCallback = this._onSentMessage.bind(this)
+    ConnectyCube.chat.onSentMessageCallback = this._onSentMessage.bind(this)
   }
 
   _onMessageListener(id, msg) {
@@ -143,13 +161,13 @@ class MainScreen extends Component {
     }
   }
 
-  // _onSentMessage(failedMessage, successMessage) {
-  // 	if (failedMessage && !successMessage) {
-  // 		console.log('Send message - FAIL');
-  // 	} else {
-  // 		console.log('Send message - SUCCESS');
-  // 	}
-  // }
+  _onSentMessage(failedMessage, successMessage) {
+    if (failedMessage && !successMessage) {
+      console.log('Send message - FAIL')
+    } else {
+      console.log('Send message - SUCCESS')
+    }
+  }
 
   // TODO:uncomment
   onNotificationListener(notification) {
@@ -187,7 +205,7 @@ class MainScreen extends Component {
               borderRadius: 40,
             }}
             onPress={() => {
-              this.props.navigation.navigate('Chat')
+              this.props.navigation.navigate('Dialog')
             }}
             icon={<Icon name="comment-dots" size={30} color={GREY_COLOR} />}
           />
