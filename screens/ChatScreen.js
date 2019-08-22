@@ -1,3 +1,6 @@
+/* eslint-disable func-names */
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/prop-types */
@@ -15,9 +18,12 @@ import {
 } from 'react-native'
 import SoftInputMode from 'react-native-set-soft-input-mode'
 import {connect} from 'react-redux'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput'
+import {Button} from 'react-native-elements'
 
+import {MAIN_COLOR, GREY_COLOR} from '../config/Constants'
 import {fetchMessages, pushMessage} from '../actions/chatMessagesActions'
 import {sortDialogs, setSelected, removeSelected} from '../actions/chatDialogsActions'
 import Chat from '../config/ChatConfig'
@@ -25,6 +31,24 @@ import MessageModel from '../models/Message'
 import Message from '../components/Message'
 
 export class ChatScreen extends Component {
+  static navigationOptions = ({navigation}) => ({
+    title: navigation.getParam('title'),
+    headerStyle: {
+      backgroundColor: MAIN_COLOR,
+    },
+    headerTitleStyle: {
+      color: GREY_COLOR,
+    },
+    headerTintColor: GREY_COLOR,
+    headerRight: (
+      <Button
+        onPress={() => navigation.navigate('Video')}
+        buttonStyle={{backgroundColor: 'rgba(0,0,0,0)', marginRight: 8}}
+        icon={<Icon name="video" color={GREY_COLOR} size={22} />}
+      />
+    ),
+  })
+
   state = {
     inProgress: true,
     messageValue: '',
@@ -45,17 +69,22 @@ export class ChatScreen extends Component {
 
     this.props.setSelected(dialog)
 
-    console.log('dialog id')
-    console.log(dialog.id)
-
     Chat.getHistory(dialog.id)
       .then(fetchMessages)
       .catch(e => alert(`Error.\n\n${JSON.stringify(e)}`))
       .then(() => this.setState({inProgress: false}))
+
+    this.chatListeners()
   }
 
   componentWillUnmount() {
     this.props.removeSelected()
+  }
+
+  chatListeners = () => {
+    ConnectyCube.chat.onSentMessageCallback = function(messageLost, messageSent) {
+      console.log(messageLost, messageSent)
+    }
   }
 
   onTypeMessage = messageValue => this.setState({messageValue})
@@ -96,10 +125,14 @@ export class ChatScreen extends Component {
   _renderMessageItem(message) {
     const isOtherSender = message.sender_id !== this.props.user.id
 
-    console.log(message.sender_id)
-    console.log(this.props)
-
-    return <Message otherSender={isOtherSender} message={message} key={message.id} />
+    return (
+      <Message
+        otherSender={isOtherSender}
+        user={this.props.user}
+        message={message}
+        key={message.id}
+      />
+    )
   }
 
   render() {
@@ -133,7 +166,7 @@ export class ChatScreen extends Component {
             enableScrollToCaret
           />
           <TouchableOpacity style={styles.button} onPress={this.sendMessage}>
-            <Icon name="send" size={32} color="blue" />
+            <IconMaterial name="send" size={32} color={MAIN_COLOR} />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

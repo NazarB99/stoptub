@@ -9,6 +9,13 @@
       "authSecret": "we4XJKfXePpBeAD"
     },
     {
+      "chat": {
+        "streamManagement": {
+            "enable": "true"
+        }
+    }
+    },
+    {
       "debug": {
         "mode": 1
       }

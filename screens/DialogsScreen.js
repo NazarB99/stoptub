@@ -7,6 +7,7 @@ import React, {Component} from 'react'
 import {RefreshControl, StatusBar, FlatList, StyleSheet, View, Text} from 'react-native'
 import {connect} from 'react-redux'
 
+import {MAIN_COLOR, GREY_COLOR} from '../config/Constants'
 import User from '../config/UserConfig'
 import {userLogin} from '../actions/chatUserActions'
 import Chat from '../config/ChatConfig'
@@ -29,6 +30,17 @@ const styles = StyleSheet.create({
 })
 
 class DialogsScreen extends Component {
+  static navigationOptions = ({navigation}) => ({
+    title: navigation.getParam('title'),
+    headerStyle: {
+      backgroundColor: MAIN_COLOR,
+    },
+    headerTitleStyle: {
+      color: GREY_COLOR,
+    },
+    headerTintColor: GREY_COLOR,
+  })
+
   state = {
     refreshing: false,
   }

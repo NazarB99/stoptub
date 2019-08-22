@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-alert */
 /* eslint-disable no-new */
@@ -23,6 +24,7 @@ import MedicationScreen from './screens/MedicationScreen'
 import CheckUpScreen from './screens/CheckUpScreen'
 import DialogsScreen from './screens/DialogsScreen'
 import ChatScreen from './screens/ChatScreen'
+import VideoScreen from './screens/VideoScreen'
 import {store, persistor} from './store'
 import {MAIN_COLOR, GREY_COLOR} from './config/Constants'
 
@@ -39,9 +41,10 @@ const StackNav = createStackNavigator(
     Main: MainScreen,
     Dialog: DialogsScreen,
     Chat: ChatScreen,
+    Video: VideoScreen,
   },
   {
-    initialRouteName: 'Main',
+    initialRouteName: 'Login',
   }
 )
 
@@ -95,16 +98,14 @@ const TabNav = createBottomTabNavigator(
 
 const AppNavigatior = createAppContainer(TabNav)
 
-const App = () => {
-  return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <View style={styles.container}>
-          <AppNavigatior style={{flex: 1}} />
-        </View>
-      </PersistGate>
-    </Provider>
-  )
-}
+const App = () => (
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <View style={styles.container}>
+        <AppNavigatior style={{flex: 1}} />
+      </View>
+    </PersistGate>
+  </Provider>
+)
 
 export default App

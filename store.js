@@ -14,7 +14,7 @@ const middleware = [thunk]
 const persistConfig = {
   key: 'primary',
   storage: AsyncStorage,
-  whitelist: ['users'],
+  whitelist: ['user'],
   // stateReconciler:hardSet
 }
 
